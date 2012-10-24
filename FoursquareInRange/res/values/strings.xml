@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">FoursquareInRangeActivity!</string>
+    <string name="app_name">FoursquareInRange</string>
+    <string name="click_for_more_information_">Click for more information!</string><!-- ovo prevodis -->
+    <string name="Distance">"Distance: "</string> <!-- ovo prevodis -->
+    <string name="checkins">"Checkins: "</string><!-- ovo prevodis -->
+    <string name="address_label">"Address: "</string><!-- ovo prevodis -->
+    <string name="phone_label">Phone: </string><!-- ovo prevodis -->
+    <string name="category_label">Category: </string><!-- ovo prevodis -->
+    <string name="venue_photo">Venue photo</string>
+    <string name="calculate_tour_route">Calculate tour route</string><!-- ovo prevodis -->
+
+</resources>

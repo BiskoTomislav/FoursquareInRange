@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textViewName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:text="@+id/textView1"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textViewPhoneLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/phone_label" />
+
+        <TextView
+            android:id="@+id/textViewVenuePhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@+id/textViewVenuePhone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textViewAddressLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/address_label" />
+
+        <TextView
+            android:id="@+id/textViewVenueAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@+id/textViewVenueAddress" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textViewCategoryLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/category_label" />
+
+        <TextView
+            android:id="@+id/textViewVenueCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@+id/textViewVenueCategory" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textViewCheckinsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/checkins" />
+
+        <TextView
+            android:id="@+id/textViewVenueCheckins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@+id/textViewVenueCheckins" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textViewDistanceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Distance" />
+
+        <TextView
+            android:id="@+id/textViewVenueDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@+id/textViewVenueDistance" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageViewVenuePhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="0dip"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.77"
+        android:contentDescription="@string/venue_photo"
+        android:src="@drawable/loading" />
+
+</LinearLayout>
