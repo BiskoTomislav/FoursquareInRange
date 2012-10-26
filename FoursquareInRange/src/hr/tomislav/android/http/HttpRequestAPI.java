@@ -9,10 +9,14 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 public class HttpRequestAPI {
 
+	/**
+	 * Method that sends request to uri, and creates JSONObject from response string.
+	 * @param uri
+	 * @return JSONObject with response from api. Response from api must be JSONObject.
+	 * @throws Exception
+	 */
 	public static JSONObject executeHttpGet(String uri) throws Exception {
 		
 		HttpGet req = new HttpGet(uri);
@@ -25,7 +29,6 @@ public class HttpRequestAPI {
 		while ((s = r.readLine()) != null) {
 			sb.append(s);
 		}
-		Log.i("RESPONSE", sb.toString());
 		return new JSONObject(sb.toString());
 	}
 }

@@ -4,6 +4,11 @@ import hr.tomislav.algorithms.Coordinate;
 
 import java.io.Serializable;
 
+/**
+ * Class for venue details.
+ * @author Tomi
+ *
+ */
 public class VenueModel implements Serializable {
 
 	private static final long serialVersionUID = 6273152723525676699L;

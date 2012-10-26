@@ -11,6 +11,11 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+/**
+ * Adapter for list in main activity.
+ * @author Tomi
+ *
+ */
 public class VenuesAdapter extends ArrayAdapter<VenueModel> {
 
 	private static final String DISTANCE_UNIT = "m";

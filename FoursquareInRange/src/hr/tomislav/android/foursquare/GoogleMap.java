@@ -45,6 +45,7 @@ public class GoogleMap extends MapActivity {
 		Intent intent = getIntent();
 
 		try {
+			// Parse JSON array with venues
 			coordinates = new JSONArray(intent.getStringExtra("Coordiantes"));
 			Log.d("BROJ ZA SPOJIT: ", "BROJ: " + coordinates.length());
 			GeoPoint center = new GeoPoint((int)(((JSONObject)coordinates.get(0)).getDouble("lat") * 1E6), 
@@ -86,14 +87,14 @@ public class GoogleMap extends MapActivity {
             
             Bitmap bmpRestaurant = BitmapFactory.decodeResource(
                 getResources(), R.drawable.restaurant); 
-			
-			// ----------- Start--------------//
+
 			Paint mPaint = new Paint();
 			mPaint.setStyle(Style.FILL);
 			mPaint.setColor(Color.RED);
 			mPaint.setAntiAlias(true);
 			mPaint.setStrokeWidth(4);
 			
+			//Drawing icons and lines, from last venue to our position.
 			for (int i = coordinates.length() - 1; i > 0; i--) {
 
 				try {
@@ -101,8 +102,7 @@ public class GoogleMap extends MapActivity {
 										  (int)(((JSONObject)coordinates.get(i)).getDouble("lng") * 1E6));
 					pEnd = new GeoPoint((int)(((JSONObject)coordinates.get(i - 1)).getDouble("lat") * 1E6), 
 							  			(int)(((JSONObject)coordinates.get(i - 1)).getDouble("lng") * 1E6));
-					//Log.d("CRTAM: ", "BROJ1 " + i + ": " + (int)(((JSONObject)coordinates.get(i)).getDouble("lat") * 1E6) + ", " + (int)(((JSONObject)coordinates.get(i)).getDouble("lng") * 1E6));
-					//Log.d("CRTAM: ", "BROJ2 " + i + ": " + (int)(((JSONObject)coordinates.get(i - 1)).getDouble("lat") * 1E6) + ", " + (int)(((JSONObject)coordinates.get(i - 1)).getDouble("lng") * 1E6));
+					
 					mapView.getProjection().toPixels(pStart, screenPtsStart);
 					mapView.getProjection().toPixels(pEnd, screenPtsEnd);
 					// Line

@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 import android.util.Log;
 
+/**
+ * Greedy algorithm for shortest route.
+ * @author Tomi
+ *
+ */
 public class GreedyAlgorithm implements IShortestRouteAlgorithm {
 
 	public ArrayList<Integer> calculateShortestRoute(Coordinate start,
@@ -36,6 +41,12 @@ public class GreedyAlgorithm implements IShortestRouteAlgorithm {
 		return Indicies;
 	}
 
+	/**
+	 * Formula to calculate distance between two geo points.
+	 * @param start
+	 * @param end
+	 * @return
+	 */
 	private double haversianDistanceCalculator(Coordinate start, Coordinate end) {
 		final int R = 6371; // Radious of the earth
 		Double lat1 = start.x;

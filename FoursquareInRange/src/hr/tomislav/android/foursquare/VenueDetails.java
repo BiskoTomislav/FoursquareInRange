@@ -15,6 +15,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * Showing venue details and photo, if aviable.
+ * @author Tomi
+ *
+ */
 public class VenueDetails extends Activity {
 
 	private static final String API_VENUE_URL_PREFIX = "https://api.foursquare.com/v2/venues/";
@@ -66,6 +71,11 @@ public class VenueDetails extends Activity {
 		new GetPhotoFromFoursquareApi().execute(uri);
 	}
 	
+	/**
+	 * Requesting photo for venue.
+	 * @author Tomi
+	 *
+	 */
 	class GetPhotoFromFoursquareApi extends AsyncTask<String, Void, String> {
 
 		// On a new thread!!!

@@ -26,23 +26,27 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+/**
+ * Main activity.
+ * 
+ * @author Tomi
+ * 
+ */
 public class FoursquareInRangeActivity extends ListActivity {
 
 	private static final String API_VENUE_SEARCH_URL = "https://api.foursquare.com/v2/venues/search?";
 	private static final String TOKEN = "I22HW3HKVJKEEFSDFFVVITOANIZWOVFDJJKUJLBJGTYNUPE4";// Auto
 																							// generated
-																							// by
-																							// Foursquare
-																							// API
 	private static final String VERSION = "20121016";
 	private static final String INTENT = "browse";// radius attribute works only
-													// with intent=browse or intent=checkin, refer
+													// with intent=browse or
+													// intent=checkin, refer
 													// to Foursquare API
 													// documentation
 	private static final Integer RADIUS = 1000;// in meters
 
 	Location location;
-	
+
 	private JSONObject tokenJson;
 	private String coordinates;
 	private ArrayList<VenueModel> venuesInRange;
@@ -54,19 +58,13 @@ public class FoursquareInRangeActivity extends ListActivity {
 	private Button btnCalculateRoute;
 	private Context context;
 
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		
-		outState.putParcelable("location", location);
-		
-		super.onSaveInstanceState(outState);
-	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		
-		super.onCreate(savedInstanceState);	
-		
+
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
+
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		locationListener = new MyLocationListener();
 		criteria = new Criteria();
@@ -76,53 +74,72 @@ public class FoursquareInRangeActivity extends ListActivity {
 		adapter = new VenuesAdapter(this, venuesInRange);
 		setListAdapter(adapter);
 
+		//Get last location if known
 		location = locationManager.getLastKnownLocation(provider);
-		if(savedInstanceState != null) {
+		if (savedInstanceState != null) {
+			//If we saved our location, use it. Rotating screen is on case when we need this.
 			location = savedInstanceState.getParcelable("location");
 		}
 		if (location != null)
+			// If we have location, fill adapter with venues from response.
 			extractVenuesFromResponse(location);
-		setContentView(R.layout.main);
-		
+		else
+			// register for location updates
+			locationManager.requestLocationUpdates(
+					LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
 		context = this;
-		btnCalculateRoute = (Button)findViewById(R.id.btnCalculateRoute);
+		btnCalculateRoute = (Button) findViewById(R.id.btnCalculateRoute);
 		btnCalculateRoute.setOnClickListener(new OnClickListener() {
-			
+
 			public void onClick(View v) {
 				ArrayList<VenueModel> choosenVenues = new ArrayList<VenueModel>();
 				ArrayList<Coordinate> coordinatesOfChoosenValues = new ArrayList<Coordinate>();
-				
+
+				// Find venues that user selected to include in route.
 				for (VenueModel venueModel : venuesInRange) {
-					if(venueModel.isChecked()) {
+					if (venueModel.isChecked()) {
 						choosenVenues.add(venueModel);
-						coordinatesOfChoosenValues.add(new Coordinate(venueModel.getGeoPosition().x, venueModel.getGeoPosition().y));
+						coordinatesOfChoosenValues.add(new Coordinate(
+								venueModel.getGeoPosition().x, venueModel
+										.getGeoPosition().y));
 					}
 				}
-				
-				if(choosenVenues.size() > 0) {
-					
+
+				// Calculeted shortest route and send JSONArray to map activity.
+				if (choosenVenues.size() > 0) {
+
 					IShortestRouteAlgorithm calculatingAlgorithm = new GreedyAlgorithm();
-					Coordinate startingPoint = new Coordinate(location.getLatitude(), location.getLongitude());
-					ArrayList<Integer> orderedVenues = calculatingAlgorithm.calculateShortestRoute(startingPoint, coordinatesOfChoosenValues);
+					Coordinate startingPoint = new Coordinate(location
+							.getLatitude(), location.getLongitude());
+					ArrayList<Integer> orderedVenues = calculatingAlgorithm
+							.calculateShortestRoute(startingPoint,
+									coordinatesOfChoosenValues);
+					// Building JSONarray with venue names and coordinates
 					StringBuilder orderedVenuesSB = new StringBuilder("[");
-					orderedVenuesSB.append("{ \"name\":\"Start \"," +
-							"\"lat\":" + location.getLatitude() + "," +
-							"\"lng\":" + location.getLongitude() + "},");
+					orderedVenuesSB.append("{ \"name\":\"Start \","
+							+ "\"lat\":" + location.getLatitude() + ","
+							+ "\"lng\":" + location.getLongitude() + "},");
 					for (Integer index : orderedVenues) {
-						orderedVenuesSB.append("{ \"name\":\"" + choosenVenues.get(index).getName() + "\"," +
-								"\"lat\":" + choosenVenues.get(index).getGeoPosition().x + "," +
-								"\"lng\":" + choosenVenues.get(index).getGeoPosition().y + "},");
+						orderedVenuesSB.append("{ \"name\":\""
+								+ choosenVenues.get(index).getName() + "\","
+								+ "\"lat\":"
+								+ choosenVenues.get(index).getGeoPosition().x
+								+ "," + "\"lng\":"
+								+ choosenVenues.get(index).getGeoPosition().y
+								+ "},");
 					}
-					orderedVenuesSB.deleteCharAt(orderedVenuesSB.length()-1);
+					orderedVenuesSB.deleteCharAt(orderedVenuesSB.length() - 1);
 					orderedVenuesSB.append("]");
 					Intent intent = new Intent(context, GoogleMap.class);
 					Log.d("JSON", orderedVenuesSB.toString());
 					intent.putExtra("Coordiantes", orderedVenuesSB.toString());
-					
+
 					startActivity(intent);
 
-				}else {
-					Toast.makeText(context, "Choose at least one venue!", 3).show();
+				} else {
+					Toast.makeText(context, "Choose at least one venue!", 3)
+							.show();
 				}
 			}
 		});
@@ -131,8 +148,6 @@ public class FoursquareInRangeActivity extends ListActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
-				0, locationListener);
 	}
 
 	@Override
@@ -141,6 +156,19 @@ public class FoursquareInRangeActivity extends ListActivity {
 		locationManager.removeUpdates(locationListener);
 	}
 
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+
+		outState.putParcelable("location", location);
+
+		super.onSaveInstanceState(outState);
+	}
+
+	/**
+	 * Location listener class.
+	 * @author Tomi
+	 *
+	 */
 	public class MyLocationListener implements LocationListener {
 
 		public void onLocationChanged(Location loc) {
@@ -160,15 +188,19 @@ public class FoursquareInRangeActivity extends ListActivity {
 		}
 	}
 
+	/**
+	 * Method for parsing JSON response from foursquareAPI.
+	 * @param loc
+	 */
 	private void extractVenuesFromResponse(Location loc) {
 		location = loc;
 		coordinates = loc.getLatitude() + "," + loc.getLongitude();
 		if (venuesInRange != null)
 			adapter.clear();
 		try {
-			tokenJson = HttpRequestAPI.executeHttpGet(API_VENUE_SEARCH_URL + "ll="
-					+ coordinates + "&intent=" + INTENT + "&radius=" + RADIUS
-					+ "&oauth_token=" + TOKEN + "&v=" + VERSION);
+			tokenJson = HttpRequestAPI.executeHttpGet(API_VENUE_SEARCH_URL
+					+ "ll=" + coordinates + "&intent=" + INTENT + "&radius="
+					+ RADIUS + "&oauth_token=" + TOKEN + "&v=" + VERSION);
 
 			JSONArray venues = (JSONArray) tokenJson.getJSONObject("response")
 					.getJSONArray("venues");
@@ -206,10 +238,9 @@ public class FoursquareInRangeActivity extends ListActivity {
 								.getString("name"));
 					else
 						model.setCategory(null);
-				}
-				else
+				} else
 					model.setCategory(null);
-				
+
 				if (venue.getJSONObject("stats").has("checkinsCount"))
 					model.setCheckinsCount(venue.getJSONObject("stats").getInt(
 							"checkinsCount"));
@@ -221,10 +252,10 @@ public class FoursquareInRangeActivity extends ListActivity {
 							"distance"));
 				else
 					model.setDistance(null);
-				
+
 				Double lat = venue.getJSONObject("location").getDouble("lat");
 				Double lng = venue.getJSONObject("location").getDouble("lng");
-				
+
 				model.setGeoPosition(new Coordinate(lat, lng));
 
 				adapter.add(model);
@@ -236,6 +267,9 @@ public class FoursquareInRangeActivity extends ListActivity {
 		adapter.notifyDataSetChanged();
 	}
 
+	/**
+	 * Calling activity with venues details.
+	 */
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
