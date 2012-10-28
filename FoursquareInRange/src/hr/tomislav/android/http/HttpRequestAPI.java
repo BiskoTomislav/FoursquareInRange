@@ -7,7 +7,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONObject;
 
 public class HttpRequestAPI {
 
@@ -17,7 +16,7 @@ public class HttpRequestAPI {
 	 * @return JSONObject with response from api. Response from api must be JSONObject.
 	 * @throws Exception
 	 */
-	public static JSONObject executeHttpGet(String uri) throws Exception {
+	public static String executeHttpGet(String uri) throws Exception {
 		
 		HttpGet req = new HttpGet(uri);
 		HttpClient client = new DefaultHttpClient();
@@ -29,6 +28,7 @@ public class HttpRequestAPI {
 		while ((s = r.readLine()) != null) {
 			sb.append(s);
 		}
-		return new JSONObject(sb.toString());
+		
+		return sb.toString();
 	}
 }

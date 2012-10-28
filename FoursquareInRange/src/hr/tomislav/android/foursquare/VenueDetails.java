@@ -40,6 +40,7 @@ public class VenueDetails extends Activity {
 	private JSONObject tokenJson;
 	VenueModel choosenVenue;
 	Drawable image;
+	String uri;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,7 @@ public class VenueDetails extends Activity {
 		category.setText(choosenVenue.getCategory());
 		checkins.setText(choosenVenue.getCheckinsCount().toString());
 		distanece.setText(choosenVenue.getDistance().toString() + DISTANCE_UNIT);
-		String uri = API_VENUE_URL_PREFIX + choosenVenue.getID() + API_VENUE_URL_SUFIX + "&oauth_token=" + TOKEN + "&v=" + VERSION;
+		uri = API_VENUE_URL_PREFIX + choosenVenue.getID() + API_VENUE_URL_SUFIX + "&oauth_token=" + TOKEN + "&v=" + VERSION;
 		
 		venuePhoto = (ImageView)findViewById(R.id.imageViewVenuePhoto);
 		venuePhoto.startAnimation(AnimationUtils.loadAnimation(this, R.anim.rotate));
@@ -81,9 +82,8 @@ public class VenueDetails extends Activity {
 		// On a new thread!!!
 		@Override
 		protected String doInBackground(String... params) {
-			String uri = params[0];
 			try {
-				tokenJson = HttpRequestAPI.executeHttpGet(uri);
+				tokenJson = new JSONObject(HttpRequestAPI.executeHttpGet(params[0]));
 				int numberOfPhotos = tokenJson.getJSONObject("response").getJSONObject("photos").getInt("count");
 				if(numberOfPhotos > 0) {
 					String prefix = ((JSONObject)(tokenJson.getJSONObject("response").getJSONObject("photos").getJSONArray("items").get(0))).getString("prefix");
